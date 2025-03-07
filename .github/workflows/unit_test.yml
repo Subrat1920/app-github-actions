@@ -1,0 +1,40 @@
+## whenever we write our yaml file we write in key, value pairs.
+## some keys are
+## name - of the workflow name
+name : Python CI
+
+## Triger the workflow on any push to the main or pull requests --> Events
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    test:
+        runs-on: ubuntu-latest  ## this is the container, git hub also provides containers for different images
+        ## window, mac, ubuntu
+
+        steps:
+            ## step 1 : Check out the code from the reqpository
+            - name : Check out code
+              uses : actions/checkout@v2
+
+            ## step 2 : Set up the python environment
+            - name : Setup Python
+              uses : actions/setup-python@v2  
+              with :
+                python-version : '3.11'
+
+            ## step 3: Install Dependencies
+            - name : Install dependencies
+              run : 
+                python -m pip install --upgrade pip
+                pip install -r requirements.txt
+
+            ## step 4: Run Tests
+            - name : Run Tests
+              run : pytest
+
